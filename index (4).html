@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Lagar de José</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pergamino:#F4EEDD;
+    --pergamino-alt:#ECE3CC;
+    --verde:#1E3B2C;
+    --verde-2:#16301F;
+    --vino:#6D1F2C;
+    --dorado:#A9832E;
+    --tinta:#2B2620;
+    --musgo:#E3DCC3;
+    --linea:#C9BB94;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    min-height:100dvh;
+    background:radial-gradient(120% 90% at 50% -10%, #234433 0%, var(--verde) 45%, var(--verde-2) 100%);
+    color:var(--pergamino);
+    font-family:'Lora', serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:56px 22px 40px;
+  }
+  ::selection{background:var(--dorado); color:#fff;}
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(16px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .press{ width:74px; height:74px; margin-bottom:18px; animation:riseIn .7s cubic-bezier(.22,.61,.36,1) both; }
+  .press svg{ width:100%; height:100%; overflow:visible; }
+  @keyframes drip{
+    0%{ transform:translateY(0); opacity:0; }
+    8%{ opacity:1; }
+    55%{ transform:translateY(20px); opacity:1; }
+    70%{ transform:translateY(24px); opacity:0; }
+    100%{ transform:translateY(24px); opacity:0; }
+  }
+  .press .drip{ animation:drip 3.4s ease-in-out infinite; transform-origin:center; }
+
+  .eyebrow{
+    font-family:'Inter', sans-serif;
+    font-size:11.5px; font-weight:600;
+    letter-spacing:.22em; text-transform:uppercase;
+    color:var(--dorado);
+    animation:riseIn .7s cubic-bezier(.22,.61,.36,1) both; animation-delay:.06s;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600; font-size:40px;
+    line-height:1.05; letter-spacing:-.01em;
+    margin:10px 0 6px; text-align:center;
+    animation:riseIn .7s cubic-bezier(.22,.61,.36,1) both; animation-delay:.16s;
+  }
+  .sub{
+    font-family:'Inter', sans-serif;
+    font-size:13px; color:#D9CFB2; letter-spacing:.02em;
+    animation:riseIn .7s cubic-bezier(.22,.61,.36,1) both; animation-delay:.26s;
+  }
+
+  .divider{
+    width:44px; height:1px; background:var(--linea); opacity:.5;
+    margin:26px 0 24px;
+    animation:riseIn .7s ease both; animation-delay:.32s;
+  }
+
+  .cards{
+    width:100%; max-width:420px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .card{
+    display:flex; align-items:center; gap:16px;
+    text-decoration:none;
+    background:var(--pergamino);
+    color:var(--tinta);
+    border-radius:16px;
+    padding:18px 20px;
+    box-shadow:0 8px 26px rgba(0,0,0,.22);
+    transition:transform .18s cubic-bezier(.22,.61,.36,1), box-shadow .18s;
+    animation:riseIn .7s cubic-bezier(.22,.61,.36,1) both;
+  }
+  .card:nth-child(1){ animation-delay:.40s; }
+  .card:nth-child(2){ animation-delay:.50s; }
+  .card:nth-child(3){ animation-delay:.60s; }
+  .card:hover{ transform:translateY(-3px); box-shadow:0 14px 34px rgba(0,0,0,.28); }
+  .card:active{ transform:translateY(-1px) scale(.99); }
+
+  .card .ico{
+    flex:0 0 auto;
+    width:48px; height:48px; border-radius:12px;
+    background:var(--musgo);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px;
+  }
+  .card .txt{ flex:1 1 auto; }
+  .card .t{
+    font-family:'Fraunces', serif;
+    font-weight:600; font-size:19px; color:var(--verde);
+    line-height:1.15;
+  }
+  .card .d{
+    font-family:'Inter', sans-serif;
+    font-size:12px; color:#7d745f; margin-top:3px;
+  }
+  .card .arrow{
+    flex:0 0 auto; color:var(--dorado); font-size:22px;
+    transition:transform .18s;
+  }
+  .card:hover .arrow{ transform:translateX(3px); }
+
+  footer{
+    margin-top:auto; padding-top:36px; text-align:center;
+    font-family:'Inter', sans-serif;
+    animation:riseIn .7s ease both; animation-delay:.70s;
+  }
+  footer .addr{ font-size:12.5px; color:#D9CFB2; }
+  footer .tel{ font-size:15px; font-weight:600; color:var(--pergamino); margin-top:4px; }
+  footer .tel a{ color:inherit; text-decoration:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; }
+    .press .drip{ opacity:1; }
+    html{ scroll-behavior:auto; }
+    .card{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="press" aria-hidden="true">
+    <svg viewBox="0 0 100 100" fill="none" stroke="#E9DFC0" stroke-width="1.6" stroke-linecap="round">
+      <path d="M28 78 h44"/>
+      <path d="M34 78 V34 M66 78 V34"/>
+      <path d="M30 34 h40 l-6 -12 h-28 z"/>
+      <path d="M50 22 V10"/>
+      <circle cx="50" cy="7" r="3"/>
+      <path d="M38 60 q12 10 24 0" stroke="#C99A3A"/>
+      <circle class="drip" cx="50" cy="66" r="2" fill="#C99A3A" stroke="none"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow">Cociña galega · A Coruña</div>
+  <h1>O Lagar de José</h1>
+  <div class="sub">Desde 1997 · Calle Pose 25</div>
+
+  <div class="divider"></div>
+
+  <nav class="cards">
+    <a class="card" href="carta.html">
+      <span class="ico">🍽️</span>
+      <span class="txt">
+        <span class="t">Carta</span>
+        <span class="d">Nuestros platos de cociña galega</span>
+      </span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+    <a class="card" href="vinos.html">
+      <span class="ico">🍷</span>
+      <span class="txt">
+        <span class="t">Carta de vinos</span>
+        <span class="d">Blancos, tintos y espumosos</span>
+      </span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+    <a class="card" href="menu.html">
+      <span class="ico">📋</span>
+      <span class="txt">
+        <span class="t">Menú del día</span>
+        <span class="d">Disponible de martes a domingo</span>
+      </span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </a>
+  </nav>
+
+  <footer>
+    <div class="addr">Calle Pose 25 · A Coruña</div>
+    <div class="tel"><a href="tel:+34981132333">981 132 333</a></div>
+  </footer>
+
+</body>
+</html>
