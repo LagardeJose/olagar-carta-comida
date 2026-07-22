@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta de vinos · O Lagar de José</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde:#2f5138; --verde-2:#1e3a29;
+    --pergamino:#f4eedd; --musgo:#e2e5d2; --linea:#e0d8c2;
+    --dorado:#c99a3a; --dorado-claro:#E9DFC0; --vino:#7c2b34;
+    --tinta:#33302a; --taupe:#7d745f;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body{ background:var(--pergamino); color:var(--tinta); font-family:'Inter',sans-serif; min-height:100vh; -webkit-font-smoothing:antialiased; }
+
+  /* HERO */
+  .home-btn{
+    position:absolute; top:16px; left:16px; z-index:5;
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--pergamino); text-decoration:none;
+    background:rgba(255,255,255,.10); border:1px solid rgba(233,223,192,.28); border-radius:999px; padding:7px 13px;
+    transition:background .2s, transform .12s ease;
+  }
+  .home-btn:hover{ background:rgba(255,255,255,.18); }
+  .home-btn:active{ transform:scale(.96); }
+  .hero{
+    position:relative; text-align:center; color:var(--pergamino);
+    background:radial-gradient(120% 140% at 50% -10%, #234433 0%, var(--verde) 45%, var(--verde-2) 100%);
+    padding:52px 24px 40px;
+  }
+  .hero .eyebrow{ font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--dorado-claro); font-weight:600; }
+  .hero h1{ font-family:'Fraunces',serif; font-weight:600; font-size:34px; margin:10px 0 6px; }
+  .hero .sub{ font-family:'Fraunces',serif; font-style:italic; font-size:14px; color:#d9caa0; }
+
+  /* LISTA */
+  main{ max-width:640px; margin:0 auto; padding:28px 18px 48px; }
+
+  /* Título de tipo: Blancos / Tintos / Espumosos */
+  .type-title{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:600;
+    font-size:30px; color:var(--verde);
+    margin:36px 0 2px; letter-spacing:-.01em;
+  }
+  .type-title:first-child{ margin-top:4px; }
+  .type-rule{ height:2px; background:linear-gradient(to right, var(--dorado), transparent); margin-bottom:16px; }
+
+  /* Subtítulo de D.O. */
+  .do-title{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:600;
+    font-size:18px; color:var(--dorado);
+    margin:20px 0 2px; letter-spacing:.01em;
+  }
+  .do-rule{ height:1px; background:var(--linea); margin-bottom:4px; }
+
+  /* Fila de vino */
+  .wine{
+    display:flex; align-items:center; gap:12px;
+    padding:13px 6px; border-bottom:1px dashed var(--linea);
+    cursor:pointer; text-align:left; width:100%;
+    background:none; border-left:none; border-right:none; border-top:none;
+    transition:background .15s;
+  }
+  .wine:last-child{ border-bottom:none; }
+  .wine:hover{ background:rgba(201,154,58,.06); }
+  .wine .info{ flex:1; }
+  .wine .nom{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--tinta); }
+  .wine .meta-row{ font-size:12.5px; color:var(--taupe); margin-top:2px; }
+  .wine .precio{ font-family:'Fraunces',serif; font-weight:600; font-size:16px; color:var(--vino); white-space:nowrap; }
+  .wine .chev{ color:var(--dorado); font-size:18px; margin-left:2px; }
+
+  /* FICHA (modal) */
+  .modal{ position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .modal[hidden]{ display:none; }
+  .modal-bg{ position:absolute; inset:0; background:rgba(30,58,41,.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); animation:fade .25s ease; }
+  .card{
+    position:relative; z-index:1; width:100%; max-width:920px; max-height:92vh; overflow-y:auto;
+    background:#fffdf6; border-radius:16px; box-shadow:0 24px 70px rgba(30,58,41,.4);
+    animation:pop .3s cubic-bezier(.22,.61,.36,1);
+  }
+  .close{
+    position:absolute; top:12px; right:12px; z-index:3; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--linea); background:#fff; color:var(--taupe); font-size:19px; line-height:1; cursor:pointer;
+  }
+  .close:active{ transform:scale(.92); }
+
+  .detail{ display:grid; grid-template-columns:200px 1.05fr 1.15fr; min-height:380px; }
+  .col-bottle{
+    background:linear-gradient(165deg, #eef0e5 0%, #dfe2cf 100%);
+    border-radius:16px 0 0 16px;
+    display:flex; align-items:center; justify-content:center; padding:24px 14px;
+  }
+  .col-bottle svg{ height:auto; filter:drop-shadow(0 12px 18px rgba(30,58,41,.22)); }
+  .col-star{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:24px 14px; border-right:1px solid var(--linea);
+  }
+  .radar-label{ font-size:11px; text-transform:uppercase; letter-spacing:.22em; color:var(--taupe); margin-bottom:6px; }
+  .col-info{ padding:28px 24px 24px; display:flex; flex-direction:column; }
+  .col-info h3{ font-family:'Fraunces',serif; font-weight:600; font-size:25px; color:var(--verde); line-height:1.08; }
+  .col-info .do2{ font-size:13px; color:var(--taupe); margin-top:3px; }
+  .col-info .uva-tag{ display:inline-block; align-self:flex-start; margin-top:10px; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--dorado); font-weight:600; border:1px solid var(--dorado); border-radius:999px; padding:4px 11px; }
+  .info-meta{ display:flex; gap:8px; margin-top:16px; }
+  .info-meta div{ flex:1; background:var(--musgo); border-radius:8px; padding:9px; text-align:center; }
+  .info-meta .lbl{ font-size:9px; text-transform:uppercase; letter-spacing:.08em; color:var(--verde); font-weight:600; }
+  .info-meta .val{ font-family:'Fraunces',serif; font-size:14px; color:var(--tinta); margin-top:3px; }
+  .desc{ font-size:14px; line-height:1.65; color:var(--tinta); margin-top:16px; }
+  .maridaje{ font-size:13px; color:var(--taupe); margin-top:10px; }
+  .maridaje b{ color:var(--verde); }
+
+  footer{ text-align:center; padding:22px 18px 40px; font-size:12.5px; color:var(--taupe); line-height:1.7; }
+  footer .tel{ font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--verde); }
+
+  /* Estrella animada */
+  .radar-data{ transform-box:fill-box; transform-origin:center; animation:starPop .85s cubic-bezier(.34,1.35,.5,1) both; }
+  .radar-grid{ animation:fade .5s ease both; }
+
+  @keyframes fade{ from{ opacity:0;} to{ opacity:1;} }
+  @keyframes pop{ from{ opacity:0; transform:translateY(14px) scale(.97);} to{ opacity:1; transform:none;} }
+  @keyframes starPop{ from{ opacity:0; transform:scale(.08) rotate(-25deg);} to{ opacity:1; transform:scale(1) rotate(0);} }
+
+  @media (max-width:660px){
+    .detail{ grid-template-columns:1fr; min-height:0; }
+    .col-bottle{ border-radius:16px 16px 0 0; padding:18px; }
+    .col-bottle svg{ max-width:82px; }
+    .col-star{ border-right:none; border-bottom:1px solid var(--linea); }
+    .col-info{ padding:22px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .modal-bg,.card,.radar-data,.radar-grid{ animation:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <a class="home-btn" href="index.html">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Inicio
+    </a>
+    <div class="eyebrow">O Lagar de José</div>
+    <h1>Carta de vinos</h1>
+    <div class="sub">Toca un vino para ver su cata</div>
+  </div>
+
+  <main id="lista"></main>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-bg" data-close></div>
+    <div class="card" id="card"></div>
+  </div>
+
+  <footer>
+    <span class="tel">981 132 333</span> · Calle Pose 25 · A Coruña
+  </footer>
+
+<script>
+  /* =========================================================
+     ESTRUCTURA: tipo → do → vinos
+     cata = [Cuerpo, Acidez, Fruta, Dulzor, Taninos, Final] (0–5)
+     ========================================================= */
+  const CARTA = [
+    {
+      tipo: 'Blancos',
+      grupos: [
+        { do: 'Rías Baixas', vinos: [
+          { nom:'Sucellos', uva:'Albariño', temp:'8–10 °C', copa:'3,20 €', bot:'18 €',
+            desc:'Fresco y aromático, con fruta blanca, flores y un final salino muy gallego.', mar:'Marisco, pulpo, pescados a la plancha', cata:[3,4,5,2,0,4] },
+          { nom:'Pazo de Señorans', uva:'Albariño', temp:'8–10 °C', copa:'3,50 €', bot:'20 €',
+            desc:'Elegante y complejo, con notas cítricas, hierbas frescas y mineral persistente.', mar:'Mariscos, ostras, sushi', cata:[4,5,4,2,0,4] },
+        ]},
+        { do: 'Ribeiro', vinos: [
+          { nom:'Viña Costeira', uva:'Treixadura', temp:'9–11 °C', copa:'3,00 €', bot:'15 €',
+            desc:'Equilibrado y floral, con punto de acidez refrescante y un final limpio.', mar:'Empanada gallega, pescados en salsa', cata:[3,4,4,2,0,3] },
+        ]},
+        { do: 'Godello', vinos: [
+          { nom:'Godello da casa', uva:'Godello', temp:'9–11 °C', copa:'3,00 €', bot:'16 €',
+            desc:'Con cuerpo y buena estructura, notas de fruta madura y un punto mineral.', mar:'Pescados al horno, arroces', cata:[4,3,4,1,0,4] },
+        ]},
+      ]
+    },
+    {
+      tipo: 'Tintos',
+      grupos: [
+        { do: 'Rioja', vinos: [
+          { nom:'Viña Ardanza', uva:'Tempranillo', temp:'16–18 °C', copa:'3,80 €', bot:'24 €',
+            desc:'Clásico riojano con crianza larga, tostados elegantes y fruta madura.', mar:'Carne a la brasa, cordero, quesos maduros', cata:[4,3,4,1,4,5] },
+        ]},
+        { do: 'Ribera del Duero', vinos: [
+          { nom:'Pago de los Capellanes', uva:'Tempranillo', temp:'16–18 °C', copa:'3,80 €', bot:'22 €',
+            desc:'Potente y redondo, con frutos negros, especias y un paso largo en boca.', mar:'Chuletón, caza, quesos fuertes', cata:[5,3,5,2,4,5] },
+        ]},
+        { do: 'Mencía', vinos: [
+          { nom:'Mencía da terra', uva:'Mencía', temp:'14–16 °C', copa:'3,20 €', bot:'17 €',
+            desc:'Ligero y afrutado, con taninos suaves y un final fresco. Muy fácil de beber.', mar:'Carnes, guisos, quesos curados', cata:[3,4,4,1,3,4] },
+        ]},
+      ]
+    },
+    {
+      tipo: 'Espumosos',
+      grupos: [
+        { do: 'Espumosos gallegos', vinos: [
+          { nom:'Fillaboa Brut', uva:'Albariño', temp:'6–8 °C', copa:'3,50 €', bot:'19 €',
+            desc:'Burbuja fina y persistente, con aroma frutal y una acidez fresca y elegante.', mar:'Aperitivo, mariscos, ensaladas', cata:[2,5,4,3,0,4] },
+        ]},
+        { do: 'Cava', vinos: [
+          { nom:'Gramona III Lustros', uva:'Macabeo · Xarel·lo', temp:'6–8 °C', copa:'4,00 €', bot:'26 €',
+            desc:'Gran reserva con muchos años de crianza, brioche, frutos secos y burbuja finísima.', mar:'Ibéricos, mariscos, foie', cata:[3,4,3,2,0,5] },
+        ]},
+        { do: 'Champagne', vinos: [
+          { nom:'Moët & Chandon Brut', uva:'Chardonnay · Pinot Noir', temp:'6–8 °C', copa:'6,50 €', bot:'48 €',
+            desc:'El grande de siempre: manzana verde, brioche, burbuja elegante y final largo.', mar:'Ostras, caviar, celebraciones', cata:[3,5,4,2,0,5] },
+        ]},
+      ]
+    },
+  ];
+
+  const LABELS = ['Cuerpo','Acidez','Fruta','Dulzor','Taninos','Final'];
+  function esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+  function radar(vals){
+    const cx=130,cy=130,R=88,N=6,max=5;
+    const ang=i=> (-90+i*360/N)*Math.PI/180;
+    const pt=(i,r)=> [cx+r*Math.cos(ang(i)), cy+r*Math.sin(ang(i))];
+    let grid='';
+    for(let ring=1;ring<=max;ring++){
+      const rr=R*ring/max; let p='';
+      for(let i=0;i<N;i++){ const[x,y]=pt(i,rr); p+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1); }
+      grid+=`<path d="${p}Z" fill="none" stroke="var(--linea)" stroke-width="1" opacity="${ring===max?'.9':'.5'}"/>`;
+    }
+    for(let i=0;i<N;i++){
+      const[x,y]=pt(i,R);
+      grid+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--linea)" stroke-width="1" opacity=".6"/>`;
+      const[lx,ly]=pt(i,R+19);
+      grid+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" font-family="Inter,sans-serif" fill="var(--taupe)">${LABELS[i]}</text>`;
+    }
+    let dp='';
+    for(let i=0;i<N;i++){ const[x,y]=pt(i,R*vals[i]/max); dp+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1); }
+    let data=`<path d="${dp}Z" fill="var(--vino)" fill-opacity=".18" stroke="var(--vino)" stroke-width="2.2" stroke-linejoin="round"/>`;
+    for(let i=0;i<N;i++){ const[x,y]=pt(i,R*vals[i]/max); data+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="var(--dorado)"/>`; }
+    return `<svg viewBox="0 0 260 260" width="100%" style="max-width:280px" role="img" aria-label="Estrella de cata">`
+         + `<g class="radar-grid">${grid}</g><g class="radar-data">${data}</g></svg>`;
+  }
+
+  function bottle(w, tipo){
+    const glass = tipo==='Tintos' ? '#5b2130' : tipo==='Espumosos' ? '#2a4a35' : '#3f6b4a';
+    const isSpar = tipo==='Espumosos';
+    return `<svg viewBox="0 0 120 320" width="100%" style="max-width:110px" aria-hidden="true">
+      <ellipse cx="60" cy="312" rx="38" ry="7" fill="rgba(30,58,41,.15)"/>
+      ${isSpar
+        ? `<rect x="50" y="5" width="20" height="12" rx="3" fill="#8a6a34"/>
+           <rect x="46" y="15" width="28" height="8" rx="3" fill="#c0a050"/>
+           <rect x="50" y="21" width="20" height="50" fill="${glass}"/>
+           <path d="M40 68 Q40 86 34 102 Q28 118 28 150 L28 288 Q28 304 44 304 L76 304 Q92 304 92 288 L92 150 Q92 118 86 102 Q80 86 80 68 Z" fill="${glass}"/>`
+        : `<rect x="52" y="6" width="16" height="14" rx="2" fill="#7a5a34"/>
+           <rect x="50" y="18" width="20" height="54" fill="${glass}"/>
+           <path d="M44 70 Q44 90 36 108 Q28 126 28 156 L28 290 Q28 304 44 304 L76 304 Q92 304 92 290 L92 156 Q92 126 84 108 Q76 90 76 70 Z" fill="${glass}"/>`
+      }
+      <path d="M39 118 Q35 158 35 208 L35 285" stroke="rgba(255,255,255,.15)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <rect x="34" y="${isSpar?196:192}" width="52" height="72" rx="3" fill="#fffdf6"/>
+      <rect x="38" y="${isSpar?200:196}" width="44" height="64" rx="2" fill="none" stroke="${glass}" stroke-opacity=".3"/>
+      <text x="60" y="${isSpar?223:219}" text-anchor="middle" font-family="Fraunces,serif" font-style="italic" font-weight="600" font-size="9.5" fill="${glass}">${esc(w.uva)}</text>
+      <line x1="45" y1="${isSpar?231:227}" x2="75" y2="${isSpar?231:227}" stroke="${glass}" stroke-opacity=".35" stroke-width="1"/>
+      <text x="60" y="${isSpar?243:240}" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" letter-spacing="1.5" fill="${glass}">O LAGAR</text>
+      <text x="60" y="${isSpar?254:251}" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" letter-spacing="1" fill="${glass}" opacity=".6">DE JOSÉ</text>
+    </svg>`;
+  }
+
+  // Construir lista con doble jerarquía
+  const lista=document.getElementById('lista');
+  CARTA.forEach(bloque=>{
+    const t=document.createElement('div'); t.className='type-title'; t.textContent=bloque.tipo; lista.appendChild(t);
+    const hr=document.createElement('div'); hr.className='type-rule'; lista.appendChild(hr);
+    bloque.grupos.forEach(g=>{
+      const dt=document.createElement('div'); dt.className='do-title'; dt.textContent=g.do; lista.appendChild(dt);
+      const dr=document.createElement('div'); dr.className='do-rule'; lista.appendChild(dr);
+      g.vinos.forEach(w=>{
+        const b=document.createElement('button'); b.className='wine';
+        b.innerHTML=`<div class="info"><div class="nom">${esc(w.nom)}</div><div class="meta-row">${esc(w.uva)}</div></div>`
+                   +`<div class="precio">${esc(w.bot)}</div><div class="chev">›</div>`;
+        b.addEventListener('click',()=>abrir(w,bloque.tipo));
+        lista.appendChild(b);
+      });
+    });
+  });
+
+  const modal=document.getElementById('modal'), card=document.getElementById('card');
+  function abrir(w, tipo){
+    card.innerHTML=`
+      <button class="close" data-close aria-label="Cerrar">×</button>
+      <div class="detail">
+        <div class="col-bottle">${bottle(w,tipo)}</div>
+        <div class="col-star">
+          <div class="radar-label">Estrella de cata</div>
+          ${radar(w.cata)}
+        </div>
+        <div class="col-info">
+          <h3>${esc(w.nom)}</h3>
+          <div class="do2">${esc(w.uva)}</div>
+          <span class="uva-tag">${esc(tipo)}</span>
+          <div class="info-meta">
+            <div><div class="lbl">Temperatura</div><div class="val">${esc(w.temp)}</div></div>
+            <div><div class="lbl">Copa</div><div class="val">${esc(w.copa)}</div></div>
+            <div><div class="lbl">Botella</div><div class="val">${esc(w.bot)}</div></div>
+          </div>
+          <div class="desc">${esc(w.desc)}</div>
+          <div class="maridaje"><b>Marida con:</b> ${esc(w.mar)}</div>
+        </div>
+      </div>`;
+    modal.hidden=false; document.body.style.overflow='hidden';
+  }
+  function cerrar(){ modal.hidden=true; document.body.style.overflow=''; }
+  modal.addEventListener('click',e=>{ if(e.target.hasAttribute('data-close')) cerrar(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!modal.hidden) cerrar(); });
+</script>
+</body>
+</html>
