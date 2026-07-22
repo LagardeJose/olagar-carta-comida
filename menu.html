@@ -25,7 +25,7 @@
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{
     min-height:100vh;
-    background-color:#1c1e1f;
+    background-color:#ffffff;
     background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E"),
       repeating-linear-gradient(
@@ -49,12 +49,12 @@
   .home-btn{
     display:inline-flex; align-items:center; gap:7px; margin:14px 0 0 16px;
     font-family:'Raleway',sans-serif; font-size:13px; font-weight:600;
-    color:var(--antracita); text-decoration:none;
-    background:#232527; border:1px solid var(--linea); border-radius:999px; padding:8px 15px;
+    color:var(--rojo); text-decoration:none;
+    background:#2a2c2e; border:1px solid #444; border-radius:999px; padding:8px 15px;
     box-shadow:0 2px 8px rgba(31,58,41,.08);
     transition:background .2s, color .2s, border-color .2s, transform .12s ease;
   }
-  .home-btn:hover{ background:var(--antracita); color:#f5f5f5; border-color:var(--antracita); }
+  .home-btn:hover{ background:#2a2a2a; color:#f5f5f5; border-color:var(--rojo); }
   .home-btn:active{ transform:scale(.96); }
 
   .hero{
@@ -73,15 +73,15 @@
 
   .sheet{
     position:relative; max-width:600px; margin:-30px auto 0;
-    background:#232527; border-radius:3px; box-shadow:0 14px 40px rgba(31,58,41,.16);
+    background:#232527; border-radius:3px; box-shadow:0 14px 40px rgba(0,0,0,.4);
     padding:40px 30px 32px; animation:rise .7s cubic-bezier(.22,.61,.36,1) both; animation-delay:.28s;
   }
-  .sheet::before{ content:''; position:absolute; inset:10px; border:2.5px double var(--rojo); opacity:.55; border-radius:2px; pointer-events:none; }
+  .sheet::before{ content:''; position:absolute; inset:10px; border:2.5px double rgba(204,26,26,.4); opacity:.55; border-radius:2px; pointer-events:none; }
   .sheet-inner{ position:relative; }
 
   .course{ text-align:center; margin-bottom:26px; }
   .course .rn{ font-family:'Raleway',sans-serif; color:var(--rojo); font-size:14px; letter-spacing:.14em; }
-  .course h2{ font-family:'Raleway',sans-serif; font-weight:600; color:var(--antracita); font-size:22px; margin-top:1px; }
+  .course h2{ font-family:'Raleway',sans-serif; font-weight:600; color:#ffffff; font-size:22px; margin-top:1px; }
   .divider{ display:flex; align-items:center; justify-content:center; gap:8px; color:var(--rojo); margin:8px auto 12px; max-width:150px; }
   .divider::before, .divider::after{ content:''; flex:1; height:1px; background:linear-gradient(to right, transparent, var(--rojo), transparent); }
   .divider i{ font-style:normal; font-size:7px; transform:rotate(45deg); }
@@ -89,7 +89,7 @@
   .aviso{ text-align:center; color:var(--gris); font-size:14px; line-height:1.6; padding:10px 0; }
 
   .tarifa{ max-width:600px; margin:18px auto 0; padding:0 30px; animation:rise .6s cubic-bezier(.22,.61,.36,1) both; animation-delay:.5s; }
-  .tarifa-box{ background:var(--antracita); color:#f5f5f5; border-radius:4px; padding:22px 20px; text-align:center; position:relative; }
+  .tarifa-box{ background:#2a2a2a; color:#f5f5f5; border-radius:4px; padding:22px 20px; text-align:center; position:relative; }
   .tarifa-box::before{ content:''; position:absolute; inset:6px; border:1px solid rgba(233,223,192,.4); border-radius:2px; pointer-events:none; }
   .tarifa .op{ position:relative; }
   .tarifa .op .txt{ font-size:13.5px; color:var(--rojo-claro); letter-spacing:.02em; }
@@ -98,7 +98,7 @@
   .tarifa .mid::before, .tarifa .mid::after{ content:''; width:36px; height:1px; background:rgba(201,154,58,.6); }
 
   footer{ text-align:center; padding:26px 22px 42px; margin-top:8px; font-size:12.5px; color:var(--gris); line-height:1.7; }
-  footer .tel{ font-family:'Raleway',sans-serif; font-weight:600; font-size:15px; color:var(--antracita); }
+  footer .tel{ font-family:'Raleway',sans-serif; font-weight:600; font-size:15px; color:var(--rojo); }
 
   @keyframes rise{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:translateY(0);} }
   @media (prefers-reduced-motion: reduce){
@@ -172,7 +172,7 @@
 
   const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   const dias  = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-  function hoy(){ const d=new Date(); return `${dias[d.getDay()]}, ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}`; }
+  function hoy(){ const d=new Date(); return ${dias[d.getDay()]}, ${d.getDate()} de ${meses[d.getMonth()]} de ${d.getFullYear()}; }
   function esc(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
   function parseCSV(text){
@@ -205,9 +205,9 @@
       if(c.i < 0) return;
       const dishes=(data[c.i]||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
       if(!dishes.length) return;
-      html += `<div class="course"><div class="rn">${rn[n]}</div><h2>${esc(c.label)}</h2>`
-            + `<div class="divider"><i>◆</i></div>`
-            + dishes.map(d=>`<div class="dish">${esc(d)}</div>`).join('') + `</div>`;
+      html += <div class="course"><div class="rn">${rn[n]}</div><h2>${esc(c.label)}</h2>
+            + <div class="divider"><i>◆</i></div>
+            + dishes.map(d=><div class="dish">${esc(d)}</div>).join('') + </div>;
       n++;
     });
     if(!html) return; // sin platos → conservamos el de reserva
