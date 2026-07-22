@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta de vinos · O Lagar de José</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --verde:#2f5138; --verde-2:#1e3a29;
+    --pergamino:#f4eedd; --musgo:#e2e5d2; --linea:#e0d8c2;
+    --dorado:#c99a3a; --dorado-claro:#E9DFC0; --vino:#7c2b34;
+    --tinta:#33302a; --taupe:#7d745f;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body{ background:var(--pergamino); color:var(--tinta); font-family:'Inter',sans-serif; min-height:100vh; -webkit-font-smoothing:antialiased; }
+  .home-btn{
+    position:absolute; top:16px; left:16px; z-index:5;
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--pergamino); text-decoration:none;
+    background:rgba(255,255,255,.10); border:1px solid rgba(233,223,192,.28); border-radius:999px; padding:7px 13px;
+    transition:background .2s, transform .12s ease;
+  }
+  .home-btn:hover{ background:rgba(255,255,255,.18); }
+  .home-btn:active{ transform:scale(.96); }
+  .hero{
+    position:relative; text-align:center; color:var(--pergamino);
+    background:radial-gradient(120% 140% at 50% -10%, #234433 0%, var(--verde) 45%, var(--verde-2) 100%);
+    padding:52px 24px 40px;
+  }
+  .hero .eyebrow{ font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--dorado-claro); font-weight:600; }
+  .hero h1{ font-family:'Fraunces',serif; font-weight:600; font-size:34px; margin:10px 0 6px; }
+  .hero .sub{ font-family:'Fraunces',serif; font-style:italic; font-size:14px; color:#d9caa0; }
+
+  main{ max-width:640px; margin:0 auto; padding:28px 18px 48px; }
+  .type-title{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:600;
+    font-size:30px; color:var(--verde); margin:36px 0 2px; letter-spacing:-.01em;
+  }
+  .type-title:first-child{ margin-top:4px; }
+  .type-rule{ height:2px; background:linear-gradient(to right, var(--dorado), transparent); margin-bottom:16px; }
+  .do-title{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:600;
+    font-size:18px; color:var(--dorado); margin:20px 0 2px;
+  }
+  .do-rule{ height:1px; background:var(--linea); margin-bottom:4px; }
+  .wine{
+    display:flex; align-items:center; gap:12px;
+    padding:13px 6px; border-bottom:1px dashed var(--linea);
+    cursor:pointer; text-align:left; width:100%;
+    background:none; border-left:none; border-right:none; border-top:none;
+    transition:background .15s;
+  }
+  .wine:last-child{ border-bottom:none; }
+  .wine:hover{ background:rgba(201,154,58,.06); }
+  .wine .info{ flex:1; }
+  .wine .nom{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--tinta); }
+  .wine .meta-row{ font-size:12.5px; color:var(--taupe); margin-top:2px; }
+  .wine .precio{ font-family:'Fraunces',serif; font-weight:600; font-size:16px; color:var(--vino); white-space:nowrap; }
+  .wine .chev{ color:var(--dorado); font-size:18px; margin-left:2px; }
+
+  /* MODAL */
+  .modal{ position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .modal[hidden]{ display:none; }
+  .modal-bg{ position:absolute; inset:0; background:rgba(30,58,41,.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); animation:fade .25s ease; }
+  .card{
+    position:relative; z-index:1; width:100%; max-width:920px; max-height:92vh; overflow-y:auto;
+    background:#fffdf6; border-radius:16px; box-shadow:0 24px 70px rgba(30,58,41,.4);
+    animation:pop .3s cubic-bezier(.22,.61,.36,1);
+  }
+  .close{
+    position:absolute; top:12px; right:12px; z-index:3; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--linea); background:#fff; color:var(--taupe); font-size:19px; line-height:1; cursor:pointer;
+  }
+  .close:active{ transform:scale(.92); }
+  .detail{ display:grid; grid-template-columns:200px 1.05fr 1.15fr; min-height:380px; }
+  .col-bottle{
+    background:linear-gradient(165deg, #eef0e5 0%, #dfe2cf 100%);
+    border-radius:16px 0 0 16px;
+    display:flex; align-items:center; justify-content:center; padding:24px 14px;
+  }
+  .col-bottle img{
+    max-height:300px; max-width:150px; width:auto; height:auto;
+    object-fit:contain; filter:drop-shadow(0 12px 18px rgba(30,58,41,.25));
+  }
+  .col-bottle .bottle-svg{ max-width:110px; filter:drop-shadow(0 12px 18px rgba(30,58,41,.22)); }
+  .col-star{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:24px 14px; border-right:1px solid var(--linea);
+  }
+  .radar-label{ font-size:11px; text-transform:uppercase; letter-spacing:.22em; color:var(--taupe); margin-bottom:6px; }
+  .col-info{ padding:28px 24px 24px; display:flex; flex-direction:column; }
+  .col-info h3{ font-family:'Fraunces',serif; font-weight:600; font-size:25px; color:var(--verde); line-height:1.08; }
+  .col-info .bodega{ font-size:12px; color:var(--taupe); margin-top:2px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; }
+  .col-info .do2{ font-size:13px; color:var(--taupe); margin-top:2px; }
+  .col-info .uva-tag{ display:inline-block; align-self:flex-start; margin-top:10px; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--dorado); font-weight:600; border:1px solid var(--dorado); border-radius:999px; padding:4px 11px; }
+  .info-meta{ display:flex; gap:8px; margin-top:16px; }
+  .info-meta div{ flex:1; background:var(--musgo); border-radius:8px; padding:9px; text-align:center; }
+  .info-meta .lbl{ font-size:9px; text-transform:uppercase; letter-spacing:.08em; color:var(--verde); font-weight:600; }
+  .info-meta .val{ font-family:'Fraunces',serif; font-size:14px; color:var(--tinta); margin-top:3px; }
+  .desc{ font-size:14px; line-height:1.65; color:var(--tinta); margin-top:16px; }
+  .maridaje{ font-size:13px; color:var(--taupe); margin-top:10px; }
+  .maridaje b{ color:var(--verde); }
+
+  footer{ text-align:center; padding:22px 18px 40px; font-size:12.5px; color:var(--taupe); line-height:1.7; }
+  footer .tel{ font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--verde); }
+
+  .radar-data{ transform-box:fill-box; transform-origin:center; animation:starPop .85s cubic-bezier(.34,1.35,.5,1) both; }
+  .radar-grid{ animation:fade .5s ease both; }
+  @keyframes fade{ from{ opacity:0;} to{ opacity:1;} }
+  @keyframes pop{ from{ opacity:0; transform:translateY(14px) scale(.97);} to{ opacity:1; transform:none;} }
+  @keyframes starPop{ from{ opacity:0; transform:scale(.08) rotate(-25deg);} to{ opacity:1; transform:scale(1) rotate(0);} }
+
+  @media (max-width:660px){
+    .detail{ grid-template-columns:1fr; min-height:0; }
+    .col-bottle{ border-radius:16px 16px 0 0; padding:18px; }
+    .col-bottle img{ max-height:160px; max-width:80px; }
+    .col-star{ border-right:none; border-bottom:1px solid var(--linea); }
+    .col-info{ padding:22px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .modal-bg,.card,.radar-data,.radar-grid{ animation:none; }
+  }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <a class="home-btn" href="index.html">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Inicio
+    </a>
+    <div class="eyebrow">O Lagar de José</div>
+    <h1>Carta de vinos</h1>
+    <div class="sub">Toca un vino para ver su cata</div>
+  </div>
+
+  <main id="lista"></main>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-bg" data-close></div>
+    <div class="card" id="card"></div>
+  </div>
+
+  <footer>
+    <span class="tel">981 132 333</span> · Calle Pose 25 · A Coruña
+  </footer>
+
+<script>
+  /* =========================================================
+     CARTA REAL — O Lagar de José
+     Imágenes: URLs oficiales de bodegas / Vivino CDN
+     cata = [Cuerpo, Acidez, Fruta, Dulzor, Taninos, Final] (0–5)
+     ========================================================= */
+  const CARTA = [
+    {
+      tipo: 'Tintos',
+      grupos: [
+        {
+          do: 'Rioja',
+          vinos: [
+            {
+              nom: 'Viña Pomal Crianza',
+              bodega: 'Bodegas Bilbaínas',
+              do: 'D.O.Ca. Rioja',
+              uva: 'Tempranillo 100%',
+              temp: '16–18 °C',
+              copa: '—',
+              bot: '—',
+              img: 'img/vina-pomal.webp',
+              desc: 'Rojo picota con destellos violáceos. Nariz intensa con violetas, frutos negros, regaliz y matices de vainilla y tostados de sus 12 meses en roble americano. En boca es suave, equilibrado y fresco, con buena estructura y taninos muy amables.',
+              mar: 'Carnes a la brasa, guisos, quesos semicurados, arroces',
+              cata: [3, 3, 4, 1, 3, 4]
+            },
+            {
+              nom: 'Arienzo de Marqués de Riscal',
+              bodega: 'Herederos del Marqués de Riscal',
+              do: 'D.O.Ca. Rioja',
+              uva: 'Tempranillo · Graciano · Mazuelo',
+              temp: '16–18 °C',
+              copa: '—',
+              bot: '—',
+              img: 'img/arienzo.webp',
+              desc: 'Fresco y frutal con frutos rojos maduros entremezclados con notas de coco y vainilla del roble americano tras 18 meses de crianza. En boca es amplio, equilibrado y con carácter, con taninos suaves y un final persistente y elegante.',
+              mar: 'Carnes blancas y rojas a la brasa, pescado azul, quesos curados',
+              cata: [3, 4, 4, 1, 3, 4]
+            },
+          ]
+        },
+        {
+          do: 'Ribera del Duero',
+          vinos: [
+            {
+              nom: 'Pago de Carraovejas',
+              bodega: 'Bodegas Pago de Carraovejas',
+              do: 'D.O. Ribera del Duero',
+              uva: 'Tinto Fino 93% · Cabernet Sauvignon · Merlot',
+              temp: '14–17 °C',
+              copa: '—',
+              bot: '—',
+              img: 'img/carraovejas.webp',
+              desc: 'Color rojo púrpura de capa alta. Nariz compleja y sugestiva con frutas maduras, notas lácteas, balsámicos y especiados dulces. En boca es carnoso, estructurado y potente a la vez que civilizado, con taninos maduros y redondos. Equilibrado, franco y persistente. 90+ Guía Peñín.',
+              mar: 'Cordero asado, carnes rojas a la parrilla, caza, jamón ibérico',
+              cata: [5, 3, 5, 2, 4, 5]
+            },
+          ]
+        },
+        {
+          do: 'Mencía · Monterrei',
+          vinos: [
+            {
+              nom: 'Ladairo Tinto Barrica',
+              bodega: 'Adegas Ladairo',
+              do: 'D.O. Monterrei',
+              uva: 'Mencía · Araúxa (Tempranillo)',
+              temp: '14–16 °C',
+              copa: '—',
+              bot: '—',
+              img: 'img/ladairo-tinto.webp',
+              desc: 'Color rojo púrpura límpido y brillante. Nariz intensa con fruta roja, notas minerales del suelo granítico de Monterrei, cacaos, café y regaliz ensamblados con elegancia con la madera. En boca es aterciopelado y potente a la vez, con taninos maduros y un final largo. 90 pts. Peñín.',
+              mar: 'Carnes rojas, caza, guisos tradicionales, quesos curados',
+              cata: [4, 4, 4, 1, 3, 4]
+            },
+          ]
+        },
+      ]
+    },
+    {
+      tipo: 'Blancos',
+      grupos: [
+        {
+          do: 'Godello · Monterrei',
+          vinos: [
+            {
+              nom: 'Ladairo Blanco',
+              bodega: 'Adegas Ladairo',
+              do: 'D.O. Monterrei',
+              uva: 'Godello · Treixadura',
+              temp: '9–12 °C',
+              copa: '—',
+              bot: '—',
+              img: 'img/ladairo-blanco.webp',
+              desc: 'Amarillo pajizo con reflejos verdosos, limpio y brillante. Nariz intensa y varietal con notas cítricas, manzana, pera, flores blancas y matices herbáceos y balsámicos. En boca es sedoso, sabroso y fresco, con ligera textura grasa, buena acidez y un final goloso y persistente.',
+              mar: 'Mariscos, pescados, aperitivos marineros, quesos gallegos',
+              cata: [3, 4, 4, 2, 0, 3]
+            },
+          ]
+        },
+      ]
+    },
+  ];
+
+  const LABELS = ['Cuerpo','Acidez','Fruta','Dulzor','Taninos','Final'];
+  function esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+  function radar(vals){
+    const cx=130,cy=130,R=88,N=6,max=5;
+    const ang=i=>(-90+i*360/N)*Math.PI/180;
+    const pt=(i,r)=>[cx+r*Math.cos(ang(i)),cy+r*Math.sin(ang(i))];
+    let grid='';
+    for(let ring=1;ring<=max;ring++){
+      const rr=R*ring/max; let p='';
+      for(let i=0;i<N;i++){const[x,y]=pt(i,rr);p+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}
+      grid+=`<path d="${p}Z" fill="none" stroke="var(--linea)" stroke-width="1" opacity="${ring===max?'.9':'.5'}"/>`;
+    }
+    for(let i=0;i<N;i++){
+      const[x,y]=pt(i,R);
+      grid+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--linea)" stroke-width="1" opacity=".6"/>`;
+      const[lx,ly]=pt(i,R+19);
+      grid+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" font-family="Inter,sans-serif" fill="var(--taupe)">${LABELS[i]}</text>`;
+    }
+    let dp='';
+    for(let i=0;i<N;i++){const[x,y]=pt(i,R*vals[i]/max);dp+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}
+    let data=`<path d="${dp}Z" fill="var(--vino)" fill-opacity=".18" stroke="var(--vino)" stroke-width="2.2" stroke-linejoin="round"/>`;
+    for(let i=0;i<N;i++){const[x,y]=pt(i,R*vals[i]/max);data+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="var(--dorado)"/>`;}
+    return `<svg viewBox="0 0 260 260" width="100%" style="max-width:280px" role="img" aria-label="Estrella de cata">`
+          +`<g class="radar-grid">${grid}</g><g class="radar-data">${data}</g></svg>`;
+  }
+
+  const lista=document.getElementById('lista');
+  CARTA.forEach(bloque=>{
+    const t=document.createElement('div'); t.className='type-title'; t.textContent=bloque.tipo; lista.appendChild(t);
+    const hr=document.createElement('div'); hr.className='type-rule'; lista.appendChild(hr);
+    bloque.grupos.forEach(g=>{
+      const dt=document.createElement('div'); dt.className='do-title'; dt.textContent=g.do; lista.appendChild(dt);
+      const dr=document.createElement('div'); dr.className='do-rule'; lista.appendChild(dr);
+      g.vinos.forEach(w=>{
+        const b=document.createElement('button'); b.className='wine';
+        b.innerHTML=`<div class="info"><div class="nom">${esc(w.nom)}</div><div class="meta-row">${esc(w.bodega)} · ${esc(w.uva)}</div></div>`
+                   +`<div class="precio">${esc(w.bot)}</div><div class="chev">›</div>`;
+        b.addEventListener('click',()=>abrir(w,bloque.tipo));
+        lista.appendChild(b);
+      });
+    });
+  });
+
+  const modal=document.getElementById('modal'), card=document.getElementById('card');
+  function abrir(w, tipo){
+    const imgHtml = w.img
+      ? `<img src="${esc(w.img)}" alt="Botella ${esc(w.nom)}" loading="lazy" onerror="this.style.display='none'">`
+      : '';
+    card.innerHTML=`
+      <button class="close" data-close aria-label="Cerrar">×</button>
+      <div class="detail">
+        <div class="col-bottle">${imgHtml}</div>
+        <div class="col-star">
+          <div class="radar-label">Estrella de cata</div>
+          ${radar(w.cata)}
+        </div>
+        <div class="col-info">
+          <div class="bodega">${esc(w.bodega)}</div>
+          <h3>${esc(w.nom)}</h3>
+          <div class="do2">${esc(w.do)}</div>
+          <span class="uva-tag">${esc(w.uva)}</span>
+          <div class="info-meta">
+            <div><div class="lbl">Temperatura</div><div class="val">${esc(w.temp)}</div></div>
+            <div><div class="lbl">Copa</div><div class="val">${esc(w.copa)}</div></div>
+            <div><div class="lbl">Botella</div><div class="val">${esc(w.bot)}</div></div>
+          </div>
+          <div class="desc">${esc(w.desc)}</div>
+          <div class="maridaje"><b>Marida con:</b> ${esc(w.mar)}</div>
+        </div>
+      </div>`;
+    modal.hidden=false; document.body.style.overflow='hidden';
+  }
+  function cerrar(){ modal.hidden=true; document.body.style.overflow=''; }
+  modal.addEventListener('click',e=>{if(e.target.hasAttribute('data-close'))cerrar();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)cerrar();});
+</script>
+</body>
+</html>
