@@ -441,7 +441,7 @@ async function cargarTodo(){
   msg('msg-inicio','Cargando datos…','work');
   try{
     DATOS.menu  = await leerArchivo('menu')  || { fecha:'',activo:true,precio1:'',precio2:'',nota:'',secciones:[] };
-    DATOS.carta = await leerArchivo('carta') || { secciones:[] };
+   DATOS.carta = await leerArchivo('carta') || [];
     DATOS.vinos = await leerArchivo('vinos') || [];
     msg('msg-inicio','');
   }catch(e){
