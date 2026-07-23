@@ -526,51 +526,72 @@ function pintarMenu(){
 function pintarCarta(){
   const p = $('#panel-carta'); p.innerHTML = ''; const c = DATOS.carta;
   p.appendChild(el('div','hint',
-    'Alérgenos con emojis: 🌾 gluten · 🥛 lácteos · 🥚 huevo · 🐟 pescado · 🦐 crustáceos · 🥜 frutos secos.'));
+    'Cada plato: nombre, descripción (opcional), precio y alérgenos. Toca los que contenga.'));
 
-  (c.secciones ||= []).forEach((sec, i) => {
+  c.forEach((sec, i) => {
     const b = el('div','bloque'), cab = el('div','cab');
-    cab.appendChild(tituloEditable(sec,'titulo'));
+    cab.appendChild(tituloEditable(sec,'title'));
     cab.appendChild(btn('Borrar','btn danger sm', () => {
-      if(confirm(`¿Borrar "${sec.titulo}" y sus ${(sec.platos||[]).length} platos?`)){
-        c.secciones.splice(i,1); pintarCarta(); }
+      if(confirm(¿Borrar "${sec.title}" y sus ${(sec.items||[]).length} platos?)){
+        c.splice(i,1); pintarCarta(); }
     }));
     b.appendChild(cab);
 
     const cu = el('div','cuerpo');
-    (sec.platos ||= []).forEach((pl, j) => {
+    (sec.items ||= []).forEach((pl, j) => {
       const d = document.createElement('details'); d.className='item';
       const s = document.createElement('summary');
-      const nm = el('span','nm', pl.nombre || '(sin nombre)');
-      const pr = el('span','precio-tag', pl.precio || '');
+      const nm = el('span','nm', pl.n || '(sin nombre)');
+      const pr = el('span','precio-tag', pl.p || '');
       s.appendChild(nm); s.appendChild(pr); d.appendChild(s);
 
       const in_ = el('div','in');
       in_.appendChild(campo('Nombre del plato',
-        inputBind(pl,'nombre','text','', () => nm.textContent = pl.nombre || '(sin nombre)')));
-      in_.appendChild(campo('Descripción', textareaBind(pl,'desc')));
-      const g = el('div','grid2');
-      g.appendChild(campo('Precio',
-        inputBind(pl,'precio','text','12 €', () => pr.textContent = pl.precio || '')));
-      g.appendChild(campo('Alérgenos', inputBind(pl,'alergenos','text','🌾🥛')));
-      in_.appendChild(g);
-      in_.appendChild(btn('Eliminar plato','btn danger sm', () => {
-        if(confirm(`¿Eliminar "${pl.nombre}"?`)){ sec.platos.splice(j,1); pintarCarta(); }
-      }));
+        inputBind(pl,'n','text','', () => nm.textContent = pl.n || '(sin nombre)')));
+      in_.appendChild(campo('Descripción (opcional)', textareaBind(pl,'s')));
+      in_.appendChild(campo('Precio',
+        inputBind(pl,'p','text','12 €', () => pr.textContent = pl.p || '')));
+      in_.appendChild(el('label','','Alérgenos'));
+      in_.appendChild(selectorAlergenos(pl));
+      const bor = btn('Eliminar plato','btn danger sm', () => {
+        if(confirm(¿Eliminar "${pl.n}"?)){ sec.items.splice(j,1); pintarCarta(); }
+      });
+      bor.style.marginTop = '14px';
+      in_.appendChild(bor);
       d.appendChild(in_); cu.appendChild(d);
     });
     cu.appendChild(btn('+ Añadir plato','btn ghost sm', () => {
-      sec.platos.push({ nombre:'Nuevo plato', desc:'', precio:'', alergenos:'' });
-      pintarCarta();
+      sec.items.push({ n:'Nuevo plato', s:'', p:'', a:[] }); pintarCarta();
     }));
     b.appendChild(cu); p.appendChild(b);
   });
 
   p.appendChild(btn('+ Añadir sección','btn ghost', () => {
-    c.secciones.push({ titulo:'Nueva sección', platos:[] }); pintarCarta();
+    c.push({ id:'sec-'+Date.now().toString(36), title:'Nueva sección', items:[] }); pintarCarta();
   }));
 }
 
+function selectorAlergenos(pl){
+  if(!Array.isArray(pl.a)) pl.a = [];
+  const wrap = el('div','alg-sel');
+  Object.entries(ALERGENOS).forEach(([num, par]) => {
+    const n = +num;
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'alg' + (pl.a.includes(n) ? ' on' : '');
+    chip.appendChild(el('span','ico', par[0]));
+    chip.appendChild(el('span','', par[1]));
+    chip.addEventListener('click', () => {
+      const idx = pl.a.indexOf(n);
+      if(idx >= 0) pl.a.splice(idx,1); else pl.a.push(n);
+      pl.a.sort((x,y) => x - y);
+      chip.classList.toggle('on');
+      tocado = true;
+    });
+    wrap.appendChild(chip);
+  });
+  return wrap;
+}
 /* ══════════════════════════════════════════════════════════
    EDITOR · VINOS
    ══════════════════════════════════════════════════════════ */
