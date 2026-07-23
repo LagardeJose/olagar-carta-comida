@@ -1,1 +1,21 @@
-
+{
+  "fecha": "2026-07-23",
+  "activo": true,
+  "precio1": "12 €",
+  "precio2": "15 €",
+  "nota": "Inclúe pan e bebida",
+  "secciones": [
+    {
+      "titulo": "Para empezar",
+      "platos": ["Caldo galego", "Ensalada da casa"]
+    },
+    {
+      "titulo": "De segundo",
+      "platos": ["Merluza á galega", "Carne ó caldeiro"]
+    },
+    {
+      "titulo": "Algo doce",
+      "platos": ["Filloas", "Tarta de Santiago"]
+    }
+  ]
+}
