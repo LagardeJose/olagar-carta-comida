@@ -1,5 +1,5 @@
 {
-  "fecha": "2026-07-23",
+  "fecha": "2026-07-24",
   "activo": true,
   "precio1": "13 €",
   "precio2": "15 €",
@@ -9,7 +9,8 @@
       "titulo": "Para empezar",
       "platos": [
         "Pasta",
-        "ensalada Mixta"
+        "ensalada Mixta",
+        "Carabineros en salsa"
       ]
     },
     {
