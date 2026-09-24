@@ -716,6 +716,9 @@ function pintarCarta(){
     const cu = el('div','cuerpo');
     (sec.items ||= []).forEach((pl, j) => {
       const d = document.createElement('details'); d.className='item';
+      d.addEventListener('toggle', () => {             // solo un plato abierto a la vez
+        if(d.open) p.querySelectorAll('details.item[open]').forEach(o => { if(o !== d) o.open = false; });
+      });
       const s = document.createElement('summary');
       const nm = el('span','nm', pl.n || '(sin nombre)');
       const bd = el('span','badges');
@@ -737,11 +740,14 @@ function pintarCarta(){
       in_.appendChild(selectorAlergenos(pl));
 
       const lf = el('label',''); lf.style.marginTop = '16px';
-      lf.innerHTML = 'Fotos <span class="contador-media">· hasta ' + MAX_FOTOS + ', la primera es la portada</span>';
+      const pintaLf = () => lf.innerHTML = 'Fotos de «' + LAGAR.esc(pl.n || 'este plato') +
+        '» <span class="contador-media">· hasta ' + MAX_FOTOS + ', la primera es la portada</span>';
+      pintaLf();
+      in_.querySelector('input').addEventListener('input', pintaLf);
       in_.appendChild(lf);
       in_.appendChild(editorFotos(pl, 'f', () => pl.n, 'platos', pintaBadges));
 
-      in_.appendChild(el('label','','Vídeos'));
+      in_.appendChild(el('label','','Vídeos de «' + (pl.n || 'este plato') + '»'));
       in_.appendChild(editorVideos(pl.v ||= [], { titulo:false, nombre:() => pl.n }, pintaBadges));
 
       const bor = btn('Eliminar plato','btn danger sm', () => {
@@ -1029,7 +1035,7 @@ function editorFotos(obj, clave, nombre, carpeta, alCambiar){
         else if(obj[clave].length < MAX_FOTOS) obj[clave].push(ruta);
       }catch(e){ alert('No se pudo usar "' + f.name + '": ' + e.message); }
     }
-    estado('Fotos listas. Pulsa Publicar para subirlas.','ok');
+    estado(`Foto añadida a «${nombre()}». Pulsa Publicar para subirla.`,'ok');
     cambio();
   }
   let add = null;
