@@ -6,7 +6,9 @@
       {
         "n": "Jamón ibérico",
         "p": "24€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Pastel de centollo, tostas y salsa rosa",
@@ -15,7 +17,9 @@
           1,
           2,
           3
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Salpicón de rape y langostinos",
@@ -24,14 +28,18 @@
           2,
           4,
           12
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Vieiras del Pacífico a la plancha",
         "p": "19€",
         "a": [
           13
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Croquetas de jamón y/o chipirón en tinta",
@@ -40,7 +48,9 @@
           1,
           2,
           7
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Tosta de chicharrones con queso del país",
@@ -48,7 +58,9 @@
         "a": [
           1,
           7
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Langostinos crujientes",
@@ -59,7 +71,9 @@
           2,
           3,
           12
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Chipirones a la andaluza",
@@ -67,14 +81,18 @@
         "a": [
           1,
           2
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Pulpo a Feira",
         "p": "21€",
         "a": [
           2
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Cazuela de langostinos y zamburiñas",
@@ -83,20 +101,28 @@
           2,
           12,
           13
-        ]
+        ],
+        "f": [
+          "media/platos/cazuela-de-langostinos-y-zamburinas-mufupqlgafg.webp"
+        ],
+        "v": []
       },
       {
         "n": "Pimientos de Padrón",
         "s": "Solo temporada",
         "p": "9€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Huevos fritos con jamón ibérico",
         "p": "18€",
         "a": [
           3
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Mejillones rellenos",
@@ -107,7 +133,9 @@
           3,
           4,
           13
-        ]
+        ],
+        "f": [],
+        "v": []
       }
     ]
   },
@@ -122,14 +150,18 @@
         "a": [
           1,
           4
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Cazuela de rape en salsa marinera",
         "p": "26€",
         "a": [
           4
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Sapitos de rape con patata chip",
@@ -138,12 +170,16 @@
           1,
           3,
           4
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Pescado del día",
         "p": "consultar",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       }
     ]
   },
@@ -154,7 +190,9 @@
       {
         "n": "Ensalada mixta",
         "p": "9€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Ensalada Lagar",
@@ -164,14 +202,18 @@
           4,
           7,
           10
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Ensalada de tomate ibérico y ventresca de bonito",
         "p": "14€",
         "a": [
           4
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Ensalada templada",
@@ -180,7 +222,9 @@
         "a": [
           2,
           13
-        ]
+        ],
+        "f": [],
+        "v": []
       }
     ]
   },
@@ -191,34 +235,46 @@
       {
         "n": "Escalopines de solomillo de ternera",
         "p": "22€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Secreto de cerdo ibérico",
         "p": "20€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Croca de ternera con verduritas",
         "p": "20€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Solomillo de cerdo ibérico con San Simón",
         "p": "19€",
         "a": [
           7
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Raxo con pimientos",
         "p": "16€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       },
       {
         "n": "Entrecot",
         "p": "22€",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       }
     ]
   },
@@ -235,7 +291,9 @@
           7,
           12,
           14
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Tarta de queso al horno",
@@ -244,7 +302,9 @@
           1,
           3,
           7
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Taquitos de queso del país y membrillo",
@@ -252,7 +312,9 @@
         "a": [
           1,
           7
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Coulant con helado de vainilla",
@@ -263,7 +325,9 @@
           7,
           8,
           14
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Dúo de bolas de helado al gusto",
@@ -271,7 +335,9 @@
         "p": "6,0€",
         "a": [
           7
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Castañas en almíbar con helado vainilla",
@@ -280,7 +346,9 @@
           1,
           7,
           8
-        ]
+        ],
+        "f": [],
+        "v": []
       }
     ]
   },
@@ -293,7 +361,9 @@
         "p": "1€",
         "a": [
           1
-        ]
+        ],
+        "f": [],
+        "v": []
       }
     ]
   },
@@ -309,13 +379,17 @@
           2,
           3,
           8
-        ]
+        ],
+        "f": [],
+        "v": []
       },
       {
         "n": "Nuevo plato",
         "s": "",
         "p": "",
-        "a": []
+        "a": [],
+        "f": [],
+        "v": []
       }
     ]
   }
