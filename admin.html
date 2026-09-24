@@ -290,6 +290,7 @@
 
 <!-- ══════════ 2 · SELECCIÓN ══════════ -->
 <section class="menu-inicio oculto" id="p-inicio">
+  <div class="msg" id="msg-inicio" style="text-align:center;margin:0 0 12px"></div>
   <button class="opcion" data-abre="menu">
     <div class="ico">📅</div>
     <div>
@@ -330,7 +331,6 @@
     </div>
     <div class="fl">›</div>
   </button>
-  <div class="msg" id="msg-inicio" style="text-align:center"></div>
   <button class="link" id="salir" style="display:block;margin:0 auto">Cerrar sesión</button>
 </section>
 
@@ -582,13 +582,15 @@ async function entrar(){
 }
 
 $('#salir').addEventListener('click', () => {
-  TOKEN=''; Object.keys(DATOS).forEach(k => DATOS[k] = null); tocado=false;
+  TOKEN=''; LISTO=false; Object.keys(DATOS).forEach(k => DATOS[k] = null); tocado=false;
   CLAVE_STOCK = null; STOCK_BLOQ = null; MEDIA.nuevos.clear(); MEDIA.borrar.clear();
   ver('p-login'); $('#titulo').textContent='Editor'; $('#btn-volver').classList.add('oculto');
 });
 
 /* ══════════ Carga de los tres archivos ══════════ */
+let LISTO = false;
 async function cargarTodo(u, p){
+  LISTO = false;
   msg('msg-inicio','Cargando datos…','work');
   try{
     DATOS.menu   = await leerArchivo('menu')   || { fecha:'',activo:true,precio1:'',precio2:'',nota:'',secciones:[] };
@@ -597,6 +599,7 @@ async function cargarTodo(u, p){
     DATOS.videos = await leerArchivo('videos') || [];
     await cargarStock(u, p);
     ['menu','carta','vinos','videos','stock'].forEach(k => ORIG[k] = JSON.stringify(DATOS[k]));
+    LISTO = true;
     msg('msg-inicio','');
     resumenStock();
   }catch(e){
@@ -608,10 +611,16 @@ async function cargarTodo(u, p){
    NAVEGACIÓN
    ══════════════════════════════════════════════════════════ */
 document.querySelectorAll('.opcion').forEach(b => b.addEventListener('click', () => {
-  if(!DATOS.menu){ msg('msg-inicio','Espera a que terminen de cargar los datos.','err'); return; }
+  if(!LISTO){ msg('msg-inicio','Espera un momento: todavía se están cargando los datos…','work'); return; }
   SECCION = b.dataset.abre;
   Object.keys(TITULOS).forEach(k => $('#panel-'+k).classList.toggle('oculto', k !== SECCION));
-  PINTAR()[SECCION]();
+  try{
+    PINTAR()[SECCION]();
+  }catch(e){
+    msg('msg-inicio','No se pudo abrir "' + TITULOS[SECCION] + '": ' + e.message + '. Haz una captura y envíasela a Marcos.','err');
+    console.error(e); return;
+  }
+  msg('msg-inicio','');
   $('#titulo').textContent = TITULOS[SECCION];
   $('#btn-volver').classList.remove('oculto');
   $('#btn-guardar').textContent = SECCION === 'stock' ? 'Guardar' : 'Publicar';
@@ -1354,7 +1363,8 @@ let STK = { filtro:'Todas', q:'', abierto:null };
 const UNIDADES = ['ud','botellas','kg','g','l','cajas','paquetes','latas','barriles'];
 
 async function cargarStock(u, p){
-  const raw = await leerArchivo('stock');
+  let raw = null;
+  try{ raw = await leerArchivo('stock'); }catch(e){ console.warn('stock', e); }
   STOCK_BLOQ = null;
   if(raw && raw.ct){
     try{
